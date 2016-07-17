@@ -1,13 +1,13 @@
 SOURCE=report.md
 OUTPUT=report.pdf
-LANGUAGE=it
 SETTINGS_FILE='settings.tex'
 # Options are pygments (the default), kate, monochrome, espresso, zenburn, haddock, and tango
 HIGHLIGHT=haddock
 # Font specs
-MAINFONT='Noto Sans CJK SC'
-SANSFONT='PT Sans'
-MONOFONT='DejaVu Sans Mono'
+MAINFONT='Noto Sans'
+SANSFONT='Noto Sans'
+MONOFONT='Noto Mono'
+CJKMAINFONT='Noto Sans CJK SC'
 TEMPLATE=template.tex
 
 .PHONY: default
@@ -21,7 +21,7 @@ ${OUTPUT}:${SOURCE}
 			-V mainfont=${MAINFONT} 			  \
 			-V sansfont=${SANSFONT} 			  \
 			-V monofont=${MONOFONT} 			  \
-			-V lang=${LANGUAGE} 				  \
+			-V CJKmainfont=${CJKMAINFONT}         \
 			-V theme:m 							  \
 			-o ${OUTPUT}	 					  \
 			$<
