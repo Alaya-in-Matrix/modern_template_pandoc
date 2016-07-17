@@ -1,19 +1,33 @@
-SOURCE=demo
-MD_EXTENSION=md
-OUTPUT=demo
+SOURCE=report.md
+OUTPUT=report.pdf
 LANGUAGE=it
 SETTINGS_FILE='settings.tex'
 # Options are pygments (the default), kate, monochrome, espresso, zenburn, haddock, and tango
-HIGHLIGHT=espresso
+HIGHLIGHT=haddock
 # Font specs
-MAINFONT='DejaVu Sans'
+MAINFONT='Noto Sans CJK SC'
 SANSFONT='PT Sans'
 MONOFONT='DejaVu Sans Mono'
+TEMPLATE=template.tex
 
+.PHONY: default
 
-
-default:
-	@pandoc -t beamer --latex-engine=xelatex --highlight-style=${HIGHLIGHT} -H ${SETTINGS_FILE} -V mainfont=${MAINFONT} -V sansfont=${SANSFONT} -V monofont=${MONOFONT} -V lang=${LANGUAGE} -V theme:m -o ${OUTPUT}.pdf ${SOURCE}.${MD_EXTENSION}
-	@pandoc -t beamer -s --latex-engine=xelatex --highlight-style=${HIGHLIGHT} -H ${SETTINGS_FILE} -V mainfont=${MAINFONT} -V sansfont=${SANSFONT} -V monofont=${MONOFONT} -V lang=${LANGUAGE} -V theme:m -o ${OUTPUT}.tex ${SOURCE}.${MD_EXTENSION}
+${OUTPUT}:${SOURCE}
+	@echo   "Compiling"
+	@pandoc 	-t beamer --latex-engine=xelatex  \
+			--highlight-style=${HIGHLIGHT} 	      \
+			-H ${SETTINGS_FILE} 				  \
+			--template=${TEMPLATE}				  \
+			-V mainfont=${MAINFONT} 			  \
+			-V sansfont=${SANSFONT} 			  \
+			-V monofont=${MONOFONT} 			  \
+			-V lang=${LANGUAGE} 				  \
+			-V theme:m 							  \
+			-o ${OUTPUT}	 					  \
+			$<
 	@echo "All done!"
-	@open ${OUTPUT}.pdf
+
+.PHONY: clean
+
+clean:
+	rm -rf *.pdf
