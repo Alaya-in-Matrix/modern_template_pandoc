@@ -1,3 +1,4 @@
 ref/
 img/
 *.md
+!README.md
