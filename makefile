@@ -1,5 +1,5 @@
-SOURCE=report.md
-OUTPUT=report.pdf
+SOURCE=report.md meta.yaml
+OUTPUT=report
 SETTINGS_FILE='settings.tex'
 # Options are pygments (the default), kate, monochrome, espresso, zenburn, haddock, and tango
 HIGHLIGHT=haddock
@@ -11,23 +11,45 @@ CJKMAINFONT='Noto Sans CJK SC'
 TEMPLATE=template.tex
 
 .PHONY: default
+.PHONY: pdf
 
-${OUTPUT}:${SOURCE}
+pdf:${OUTPUT}.pdf
+latex:${OUTPUT}.tex
+
+${OUTPUT}.pdf:${SOURCE}
 	@echo   "Compiling"
-	@pandoc 	-t beamer --latex-engine=xelatex  \
-			--highlight-style=${HIGHLIGHT} 	      \
-			-H ${SETTINGS_FILE} 				  \
-			--template=${TEMPLATE}				  \
-			-V mainfont=${MAINFONT} 			  \
-			-V sansfont=${SANSFONT} 			  \
-			-V monofont=${MONOFONT} 			  \
-			-V CJKmainfont=${CJKMAINFONT}         \
-			-V theme:m 							  \
-			-o ${OUTPUT}	 					  \
-			$<
+	pandoc 	-t beamer --latex-engine=xelatex        \
+			--highlight-style=${HIGHLIGHT}          \
+			-s                                      \
+			-H ${SETTINGS_FILE}                     \
+			--template=${TEMPLATE}                  \
+			-V mainfont=${MAINFONT}                 \
+			-V sansfont=${SANSFONT}                 \
+			-V monofont=${MONOFONT}                 \
+			-V CJKmainfont=${CJKMAINFONT}           \
+			-V theme:m                              \
+			-o $@                                   \
+			$^
+	@echo "All done!"
+
+${OUTPUT}.tex:${SOURCE}
+	@echo   "Compiling"
+	pandoc 	-t beamer --latex-engine=xelatex        \
+			--highlight-style=${HIGHLIGHT}          \
+			-s                                      \
+			-H ${SETTINGS_FILE}                     \
+			--template=${TEMPLATE}                  \
+			-V mainfont=${MAINFONT}                 \
+			-V sansfont=${SANSFONT}                 \
+			-V monofont=${MONOFONT}                 \
+			-V CJKmainfont=${CJKMAINFONT}           \
+			-V theme:m                              \
+			-o $@                                   \
+			$^ 
 	@echo "All done!"
 
 .PHONY: clean
 
 clean:
-	rm -rf *.pdf
+	rm -rf ${OUTPUT}.pdf
+	rm -rf ${OUTPUT}.tex
