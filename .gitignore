@@ -3,3 +3,5 @@ ref/
 img/
 *.md
 !README.md
+*.pdf
+
